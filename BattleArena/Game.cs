@@ -53,6 +53,7 @@ namespace BattleArena
         /// </summary>
         public void Update()
         {
+
         }
 
         /// <summary>
@@ -115,6 +116,7 @@ namespace BattleArena
         /// </summary>
         void DisplayCurrentScene()
         {
+
         }
 
         /// <summary>
@@ -122,6 +124,7 @@ namespace BattleArena
         /// </summary>
         void DisplayMainMenu()
         {
+
         }
 
         /// <summary>
@@ -139,6 +142,7 @@ namespace BattleArena
         /// </summary>
         public void CharacterSelection()
         {
+
         }
 
         /// <summary>
@@ -157,6 +161,7 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         float CalculateDamage(float attackPower, float defensePower)
         {
+
         }
 
         /// <summary>
@@ -167,6 +172,7 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         public float Attack(ref Character attacker, ref Character defender)
         {
+
         }
 
         /// <summary>
@@ -174,6 +180,7 @@ namespace BattleArena
         /// </summary>
         public void Battle()
         {
+
         }
 
         /// <summary>
@@ -182,6 +189,7 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
+
         }
 
     }
