@@ -17,7 +17,7 @@ namespace BattleArena
 
     class Game
     {
-        bool gameOver;
+        bool gameOver = false;
         int currentScene;
         Character player;
         Character[] enemies;
@@ -29,6 +29,15 @@ namespace BattleArena
         /// </summary>
         public void Run()
         {
+            Start();
+
+            while (!gameOver)
+            {
+
+            }
+
+            End();
+
         }
 
         /// <summary>
@@ -36,6 +45,7 @@ namespace BattleArena
         /// </summary>
         public void Start()
         {
+
         }
 
         /// <summary>
@@ -50,6 +60,7 @@ namespace BattleArena
         /// </summary>
         public void End()
         {
+            Console.WriteLine("Fairwell adventurer.");
         }
 
         /// <summary>
