@@ -18,7 +18,7 @@ namespace BattleArena
     class Game
     {
         bool gameOver = false;
-        int currentScene;
+        int currentScene = 0;
         Character player;
         Character[] enemies;
         private int currentEnemyIndex = 0;
@@ -151,6 +151,7 @@ namespace BattleArena
         /// <param name="character">The character that will have its stats shown</param>
         void DisplayStats(Character character)
         {
+
         }
 
         /// <summary>
