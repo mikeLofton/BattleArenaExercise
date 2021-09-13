@@ -150,7 +150,16 @@ namespace BattleArena
         /// </summary>
         void DisplayMainMenu()
         {
+            int input = GetInput("Play Again?", "1. Yes", "2. No");
 
+            if (input == 1)
+            {
+                currentScene = 0;
+            }
+            else if (input == 2)
+            {
+                gameOver = true;
+            }
         }
 
         /// <summary>
