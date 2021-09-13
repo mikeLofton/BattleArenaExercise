@@ -161,8 +161,7 @@ namespace BattleArena
         {
             Console.WriteLine("Welcome! Please enter your name.");
             Console.Write("> ");
-            player.name = Console.ReadLine();
-            Console.WriteLine("Nice to meet you " + player.name + ". Please select a character.");
+            player.name = Console.ReadLine();        
         }
 
         /// <summary>
@@ -171,7 +170,21 @@ namespace BattleArena
         /// </summary>
         public void CharacterSelection()
         {
+            int input = GetInput("Nice to meet you " + player.name + ". Please select a character.",
+                "1. Wizard", "2. Knight");
 
+            if (input == 1)
+            {
+                player.health = 50f;
+                player.attackPower = 25f;
+                player.defensePower = 5f;
+            }
+            else if (input == 2)
+            {
+                player.health = 75f;
+                player.attackPower = 15f;
+                player.defensePower = 10f;
+            }
         }
 
         /// <summary>
@@ -180,7 +193,10 @@ namespace BattleArena
         /// <param name="character">The character that will have its stats shown</param>
         void DisplayStats(Character character)
         {
-
+            Console.WriteLine("Name: " + character.name);
+            Console.WriteLine("Health: " + character.health);
+            Console.WriteLine("Attack Power: " + character.attackPower);
+            Console.WriteLine("Defense Power: " + character.defensePower);
         }
 
         /// <summary>
