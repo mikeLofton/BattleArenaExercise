@@ -142,7 +142,27 @@ namespace BattleArena
         /// </summary>
         void DisplayCurrentScene()
         {
+            switch (currentScene)
+            {
+                case 0:
+                    GetPlayerName();
+                    CharacterSelection();
+                    break;
 
+                case 1:
+                    Battle();
+                    CheckBattleResults();
+                    Console.ReadKey(true);
+                    break;
+
+                case 2:
+                    DisplayMainMenu();
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid scene index");
+                    break;
+            }
         }
 
         /// <summary>
@@ -216,7 +236,7 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         float CalculateDamage(float attackPower, float defensePower)
         {
-            
+            return attackPower - defensePower;
         }
 
         /// <summary>
@@ -227,7 +247,9 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         public float Attack(ref Character attacker, ref Character defender)
         {
-            
+            float damageTaken = CalculateDamage(attacker.attackPower, defender.defensePower);
+            defender.health -= damageTaken;
+            return damageTaken;
         }
 
         /// <summary>
@@ -235,7 +257,26 @@ namespace BattleArena
         /// </summary>
         public void Battle()
         {
+            DisplayStats(player);
+            DisplayStats(currentEnemy);
 
+            int input = GetInput("A " + currentEnemy.name + " stands in front of you! What will you do?",
+                "1. Attack", "2. Dodge");
+
+            if (input == 1)
+            {
+                //The player attacks the enemy
+                float damageTaken = Attack(ref player, ref currentEnemy);
+                Console.WriteLine("You dealt " + damageTaken + " damage!");
+
+                //The enemy attacks the player
+                damageTaken = Attack(ref currentEnemy, ref player);
+                Console.WriteLine("The " + currentEnemy.name + " dealt " + damageTaken);
+            }
+            else if (input == 2)
+            {
+                Console.WriteLine("You dodged the enemy's attack!");
+            }
         }
 
         /// <summary>
@@ -244,7 +285,7 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
-
+           
         }
 
     }
