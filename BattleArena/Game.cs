@@ -273,6 +273,10 @@ namespace BattleArena
             {
                 defender.health -= damageTaken;
             }
+           else if (damageTaken < 0)
+            {
+                damageTaken = 0;
+            }
             
             return damageTaken;
         }
