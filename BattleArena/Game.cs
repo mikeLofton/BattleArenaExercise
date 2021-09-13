@@ -38,7 +38,7 @@ namespace BattleArena
 
             while (!gameOver)
             {
-
+                
             }
 
             End();
@@ -70,6 +70,8 @@ namespace BattleArena
             kris.health = 25f;
             kris.attackPower = 10f;
             kris.defensePower = 5f;
+
+            enemies = new Character[] { slime, zomB, kris };
         }
 
         /// <summary>
@@ -157,7 +159,10 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-
+            Console.WriteLine("Welcome! Please enter your name.");
+            Console.Write("> ");
+            player.name = Console.ReadLine();
+            Console.WriteLine("Nice to meet you " + player.name + ". Please select a character.");
         }
 
         /// <summary>
@@ -186,7 +191,7 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         float CalculateDamage(float attackPower, float defensePower)
         {
-
+            
         }
 
         /// <summary>
@@ -197,7 +202,7 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         public float Attack(ref Character attacker, ref Character defender)
         {
-
+            
         }
 
         /// <summary>
