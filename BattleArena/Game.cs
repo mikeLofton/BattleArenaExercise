@@ -24,6 +24,11 @@ namespace BattleArena
         private int currentEnemyIndex = 0;
         private Character currentEnemy;
 
+        //Enemies
+        Character slime;
+        Character zomB;
+        Character kris;
+
         /// <summary>
         /// Function that starts the main game loop
         /// </summary>
@@ -45,7 +50,26 @@ namespace BattleArena
         /// </summary>
         public void Start()
         {
+            //Initialize Characters
+            player.name = "";
+            player.health = 0;
+            player.attackPower = 0;
+            player.defensePower = 0;
 
+            slime.name = "Slime";
+            slime.health = 50f;
+            slime.attackPower = 1f;
+            slime.defensePower = 0;
+
+            zomB.name = "Zom-B";
+            zomB.health = 15f;
+            zomB.attackPower = 5f;
+            zomB.defensePower = 2f;
+
+            kris.name = "Kris";
+            kris.health = 25f;
+            kris.attackPower = 10f;
+            kris.defensePower = 5f;
         }
 
         /// <summary>
