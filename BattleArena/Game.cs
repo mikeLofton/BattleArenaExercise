@@ -52,26 +52,12 @@ namespace BattleArena
         /// </summary>
         public void Start()
         {
-            //Initialize Characters
-            player.name = "";
-            player.health = 0;
-            player.attackPower = 0;
-            player.defensePower = 0;
+            //Initialize Characters          
+            slime = new Character { name = "Slime", health = 10f, attackPower = 1f, defensePower = 0 };
 
-            slime.name = "Slime";
-            slime.health = 10f;
-            slime.attackPower = 1f;
-            slime.defensePower = 0;
+            zomB = new Character { name = "Zom-B", health = 15f, attackPower = 5f, defensePower = 2f };
 
-            zomB.name = "Zom-B";
-            zomB.health = 15f;
-            zomB.attackPower = 5f;
-            zomB.defensePower = 2f;
-
-            kris.name = "Kris";
-            kris.health = 25f;
-            kris.attackPower = 10f;
-            kris.defensePower = 5f;
+            kris = new Character { name = "a guy named Kris", health = 25f, attackPower = 10f, defensePower = 5f };         
 
             enemies = new Character[] { slime, zomB, kris };
 
@@ -316,7 +302,14 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
-            if (currentEnemy.health <= 0)
+           if (player.health <= 0)
+            {
+                Console.WriteLine("You were slain...");
+                Console.ReadKey(true);
+                Console.Clear();
+                currentScene = 2;
+            }           
+            else if (currentEnemy.health <= 0)
             {
                 Console.ReadKey(true);
                 Console.Clear();
