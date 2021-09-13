@@ -38,7 +38,7 @@ namespace BattleArena
 
             while (!gameOver)
             {
-                
+                Update();
             }
 
             End();
@@ -57,7 +57,7 @@ namespace BattleArena
             player.defensePower = 0;
 
             slime.name = "Slime";
-            slime.health = 50f;
+            slime.health = 10f;
             slime.attackPower = 1f;
             slime.defensePower = 0;
 
@@ -72,6 +72,8 @@ namespace BattleArena
             kris.defensePower = 5f;
 
             enemies = new Character[] { slime, zomB, kris };
+
+            ResetCurrentEnemy();
         }
 
         /// <summary>
@@ -79,7 +81,8 @@ namespace BattleArena
         /// </summary>
         public void Update()
         {
-
+            DisplayCurrentScene();
+            Console.Clear();
         }
 
         /// <summary>
@@ -150,7 +153,7 @@ namespace BattleArena
                     break;
 
                 case 1:
-                    Battle();
+                    Battle();                 
                     CheckBattleResults();
                     Console.ReadKey(true);
                     break;
@@ -174,6 +177,7 @@ namespace BattleArena
 
             if (input == 1)
             {
+                ResetCurrentEnemy();
                 currentScene = 0;
             }
             else if (input == 2)
@@ -188,9 +192,23 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-            Console.WriteLine("Welcome! Please enter your name.");
-            Console.Write("> ");
-            player.name = Console.ReadLine();        
+            bool confirmName = false;
+            while (!confirmName)
+            {
+                Console.WriteLine("Welcome! Please enter your name.");
+                Console.Write("> ");
+                player.name = Console.ReadLine();
+
+                Console.Clear();
+
+                int input = GetInput("You've entered " + player.name + " are you sure you want to keep this name?",
+                    "1. Yes", "2. No");
+
+                if (input == 1)
+                {
+                    confirmName = true;
+                }              
+            }
         }
 
         /// <summary>
@@ -214,6 +232,8 @@ namespace BattleArena
                 player.attackPower = 15f;
                 player.defensePower = 10f;
             }
+
+            currentScene++;
         }
 
         /// <summary>
@@ -225,7 +245,7 @@ namespace BattleArena
             Console.WriteLine("Name: " + character.name);
             Console.WriteLine("Health: " + character.health);
             Console.WriteLine("Attack Power: " + character.attackPower);
-            Console.WriteLine("Defense Power: " + character.defensePower);
+            Console.WriteLine("Defense Power: " + character.defensePower + "\n");
         }
 
         /// <summary>
@@ -235,7 +255,7 @@ namespace BattleArena
         /// <param name="defensePower">The defending character's defense power</param>
         /// <returns>The amount of damage done to the defender</returns>
         float CalculateDamage(float attackPower, float defensePower)
-        {
+        {          
             return attackPower - defensePower;
         }
 
@@ -248,7 +268,12 @@ namespace BattleArena
         public float Attack(ref Character attacker, ref Character defender)
         {
             float damageTaken = CalculateDamage(attacker.attackPower, defender.defensePower);
-            defender.health -= damageTaken;
+
+           if (damageTaken >= 0)
+            {
+                defender.health -= damageTaken;
+            }
+            
             return damageTaken;
         }
 
@@ -266,12 +291,12 @@ namespace BattleArena
             if (input == 1)
             {
                 //The player attacks the enemy
-                float damageTaken = Attack(ref player, ref currentEnemy);
-                Console.WriteLine("You dealt " + damageTaken + " damage!");
+                float damageDealt = Attack(ref player, ref currentEnemy);
+                Console.WriteLine("You dealt " + damageDealt + " damage!");
 
                 //The enemy attacks the player
-                damageTaken = Attack(ref currentEnemy, ref player);
-                Console.WriteLine("The " + currentEnemy.name + " dealt " + damageTaken);
+                damageDealt = Attack(ref currentEnemy, ref player);
+                Console.WriteLine("The " + currentEnemy.name + " dealt " + damageDealt);
             }
             else if (input == 2)
             {
@@ -285,8 +310,41 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
-           
+            if (currentEnemy.health <= 0)
+            {
+                Console.ReadKey(true);
+                Console.Clear();
+                Console.WriteLine("You slayed the " + currentEnemy.name);
+                
+
+                currentEnemyIndex++;
+
+                if (TryEndGame())
+                {
+                    return;
+                }
+
+                currentEnemy = enemies[currentEnemyIndex];
+            }
+        } 
+        
+        void ResetCurrentEnemy()
+        {
+            currentEnemyIndex = 0;
+
+            currentEnemy = enemies[currentEnemyIndex];
         }
 
+        bool TryEndGame()
+        {
+            bool endGame = currentEnemyIndex >= enemies.Length;
+
+            if (endGame)
+            {
+                currentScene = 2;
+            }
+
+            return endGame;
+        }
     }
 }
