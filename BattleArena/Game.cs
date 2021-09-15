@@ -170,16 +170,14 @@ namespace BattleArena
         /// until the player decides to keep the name.
         /// </summary>
         void GetPlayerName()
-        {
-            
-            
-                Console.WriteLine("Welcome! Please enter your name.");
-                Console.Write("> ");
-                _playerName = Console.ReadLine();
+        {                     
+           Console.WriteLine("Welcome! Please enter your name.");
+           Console.Write("> ");
+           _playerName = Console.ReadLine();
 
-                Console.Clear();
+           Console.Clear();
 
-                int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
+           int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
                     "1. Yes", "2. No");
                 
             if (input == 1)
