@@ -148,17 +148,20 @@ namespace BattleArena
             switch (currentScene)
             {
                 case 0:
-                    GetPlayerName();
-                    CharacterSelection();
+                    GetPlayerName();                
                     break;
 
                 case 1:
+                    CharacterSelection();
+                    break;
+
+                case 2:
                     Battle();                 
                     CheckBattleResults();
                     Console.ReadKey(true);
                     break;
 
-                case 2:
+                case 3:
                     DisplayMainMenu();
                     break;
 
@@ -192,9 +195,7 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-            bool confirmName = false;
-            while (!confirmName)
-            {
+           
                 Console.WriteLine("Welcome! Please enter your name.");
                 Console.Write("> ");
                 player.name = Console.ReadLine();
@@ -204,11 +205,15 @@ namespace BattleArena
                 int input = GetInput("You've entered " + player.name + " are you sure you want to keep this name?",
                     "1. Yes", "2. No");
 
-                if (input == 1)
-                {
-                    confirmName = true;
-                }              
+            if (input == 1)
+            {
+                currentScene = 1;
             }
+            else if (input == 2)
+            {
+                currentScene = 0;
+            }
+
         }
 
         /// <summary>
@@ -345,7 +350,7 @@ namespace BattleArena
 
             if (endGame)
             {
-                currentScene = 2;
+                currentScene = 3;
             }
 
             return endGame;
