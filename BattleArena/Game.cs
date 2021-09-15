@@ -49,7 +49,7 @@ namespace BattleArena
 
             _enemies = new Entity[] { slime, zomB, kris };
 
-            ResetCurrentEnemy();
+            InitalizeEnemies();
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace BattleArena
 
             if (input == 1)
             {
-                ResetCurrentEnemy();
+                InitalizeEnemies();
                 _currentScene = 0;
             }
             else if (input == 2)
@@ -224,40 +224,7 @@ namespace BattleArena
             Console.WriteLine("Health: " + character.Health);
             Console.WriteLine("Attack Power: " + character.AttackPower);
             Console.WriteLine("Defense Power: " + character.DefensePower + "\n");
-        }
-
-        /// <summary>
-        /// Calculates the amount of damage that will be done to a character
-        /// </summary>
-        /// <param name="attackPower">The attacking character's attack power</param>
-        /// <param name="defensePower">The defending character's defense power</param>
-        /// <returns>The amount of damage done to the defender</returns>
-        float CalculateDamage(float attackPower, float defensePower)
-        {          
-            return attackPower - defensePower;
-        }
-
-        /// <summary>
-        /// Deals damage to a character based on an attacker's attack power
-        /// </summary>
-        /// <param name="attacker">The character that initiated the attack</param>
-        /// <param name="defender">The character that is being attacked</param>
-        /// <returns>The amount of damage done to the defender</returns>
-        public float Attack(ref Entity attacker, ref Entity defender)
-        {
-            float damageTaken = CalculateDamage(attacker.attackPower, defender.defensePower);
-
-           if (damageTaken >= 0)
-            {
-                defender.health -= damageTaken;
-            }
-           else if (damageTaken < 0)
-            {
-                damageTaken = 0;
-            }
-            
-            return damageTaken;
-        }
+        }     
 
         /// <summary>
         /// Simulates one turn in the current monster fight
@@ -267,18 +234,18 @@ namespace BattleArena
             DisplayStats(_player);
             DisplayStats(_currentEnemy);
 
-            int input = GetInput("A " + _currentEnemy.name + " stands in front of you! What will you do?",
+            int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?",
                 "1. Attack", "2. Dodge");
 
             if (input == 1)
             {
                 //The player attacks the enemy
-                float damageDealt = Attack(ref _player, ref _currentEnemy);
+                float damageDealt = _player.Attack(_currentEnemy);
                 Console.WriteLine("You dealt " + damageDealt + " damage!");
 
                 //The enemy attacks the player
-                damageDealt = Attack(ref _currentEnemy, ref _player);
-                Console.WriteLine("The " + _currentEnemy.name + " dealt " + damageDealt);
+                damageDealt = _currentEnemy.Attack(_player);
+                Console.WriteLine("The " + _currentEnemy.Name + " dealt " + damageDealt);
             }
             else if (input == 2)
             {
@@ -292,18 +259,18 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
-           if (_player.health <= 0)
+           if (_player.Health <= 0)
             {
                 Console.WriteLine("You were slain...");
                 Console.ReadKey(true);
                 Console.Clear();
                 _currentScene = 3;
             }           
-            else if (_currentEnemy.health <= 0)
+            else if (_currentEnemy.Health <= 0)
             {
                 Console.ReadKey(true);
                 Console.Clear();
-                Console.WriteLine("You slayed the " + _currentEnemy.name);
+                Console.WriteLine("You slayed the " + _currentEnemy.Name);
                 
 
                 _currentEnemyIndex++;
@@ -315,11 +282,19 @@ namespace BattleArena
 
                 _currentEnemy = _enemies[_currentEnemyIndex];
             }
-        } 
-        
-        void ResetCurrentEnemy()
+        }        
+
+        public void InitalizeEnemies()
         {
             _currentEnemyIndex = 0;
+
+            slime = new Entity("Slime", 10, 1, 0);
+
+            zomB = new Entity("Zom-B", 15, 5, 2);
+
+            kris = new Entity("a guy named Kris", 25, 10, 5);
+
+            _enemies = new Entity[] { slime, zomB, kris };
 
             _currentEnemy = _enemies[_currentEnemyIndex];
         }
