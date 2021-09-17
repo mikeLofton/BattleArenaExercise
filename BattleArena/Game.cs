@@ -319,7 +319,14 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
-            if (currentEnemy.health <= 0)
+            if (player.health <= 0)
+            {
+                Console.WriteLine("You were slain...");
+                Console.ReadKey(true);
+                Console.Clear();
+                currentScene = 3;
+            }
+            else if (currentEnemy.health <= 0)
             {
                 Console.ReadKey(true);
                 Console.Clear();
