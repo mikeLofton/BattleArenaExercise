@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace BattleArena
 {
@@ -8,13 +9,13 @@ namespace BattleArena
     {
         private Item[] _items;
         private Item _currentItem;
-
+        private int _currentItemIndex;
 
         public override float DefensePower
         {
             get
             {
-                if (_currentItem.ItemType == 0)
+                if (_currentItem.Type == ItemType.DEFENSE)
                     return base.DefensePower + CurrentItem.StatBoost;
 
                 return base.DefensePower;
@@ -25,7 +26,7 @@ namespace BattleArena
         { 
             get
             {
-                if (_currentItem.ItemType == 1)
+                if (_currentItem.Type == ItemType.ATTACK)
                     return base.AttackPower + CurrentItem.StatBoost;
 
                 return base.AttackPower;                
@@ -57,8 +58,10 @@ namespace BattleArena
                 return false;
             }
 
+            _currentItemIndex = index;
+
             //Set the current item to be the array at the given index
-            _currentItem = _items[index];
+            _currentItem = _items[_currentItemIndex];
 
             return true;
         }
@@ -75,6 +78,8 @@ namespace BattleArena
                 //...return false
                 return false;
             }
+
+            _currentItemIndex = -1;
 
             //Set item to be nothing
             _currentItem = new Item();
@@ -94,6 +99,12 @@ namespace BattleArena
             }
 
             return itemNames;
+        }
+
+        public override void Save(StreamWriter writer)
+        {
+            base.Save(writer);
+            writer.WriteLine(_currentItemIndex);
         }
     }
 }

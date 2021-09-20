@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace BattleArena
 {  
@@ -15,7 +16,7 @@ namespace BattleArena
     {
         public string Name;
         public float StatBoost;
-        public int Type;
+        public ItemType Type;
     }
 
     public class Game
@@ -84,6 +85,22 @@ namespace BattleArena
         public void End()
         {
             Console.WriteLine("Fairwell adventurer.");
+        }
+
+        public void Save()
+        {
+            //Create a new stream writer
+            StreamWriter writer = new StreamWriter("SaveData.txt");
+
+            //Save current enemy index
+            writer.WriteLine(_currentEnemyIndex);
+
+            //Save current player and enemy stats
+            _player.Save(writer);
+            _currentEnemy.Save(writer);
+
+            //Close the writer when done saving
+            writer.Close();
         }
 
         /// <summary>
@@ -269,7 +286,7 @@ namespace BattleArena
             DisplayStats(_currentEnemy);
 
             int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?",
-                "1. Attack", "2. Equip Item", "3. Remove current item");
+                "1. Attack", "2. Equip Item", "3. Remove current item", "4. Save");
 
             if (input == 0)
             {
@@ -284,6 +301,22 @@ namespace BattleArena
             else if (input == 1)
             {
                 DisplayEquipItemMenu();              
+            }
+            else if (input == 2)
+            {
+                if (!_player.TryRemoveCurrentItem())
+                    Console.WriteLine("You don't have anything equipped.");
+                else
+                    Console.WriteLine("You placed the item in your bag.");
+
+                //Console.ReadKey(true);
+                //Console.Clear();
+                //return;
+            }
+            else if (input == 3)
+            {
+                Save();
+                Console.WriteLine("Saved Game");
             }
         }
 
@@ -321,12 +354,12 @@ namespace BattleArena
         public void InitalizeItems()
         {
             //Wizard Items
-            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, ItemType = 1 };
-            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, ItemType = 0 };
+            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, Type = ItemType.ATTACK };
+            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, Type = ItemType.DEFENSE};
 
             //Knight Items
-            Item wand = new Item { Name = "Wand", StatBoost = 10, ItemType = 1 };
-            Item shoes = new Item { Name = "Shoes", StatBoost = 90, ItemType = 0 };
+            Item wand = new Item { Name = "Wand", StatBoost = 10, Type = ItemType.ATTACK };
+            Item shoes = new Item { Name = "Shoes", StatBoost = 90, Type = ItemType.DEFENSE };
 
             //Initialize Arrays
             _wizardItems = new Item[] { bigWand, bigShield };
