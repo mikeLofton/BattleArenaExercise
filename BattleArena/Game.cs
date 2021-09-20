@@ -4,13 +4,21 @@ using System.Text;
 
 namespace BattleArena
 {  
+    public enum ItemType
+    {
+        DEFENSE,
+        ATTACK,
+        NONE
+    }
+
     public struct Item
     {
         public string Name;
         public float StatBoost;
+        public int Type;
     }
 
-    class Game
+    public class Game
     {
         private bool _gameOver = false;
         private int _currentScene = 0;
@@ -82,8 +90,7 @@ namespace BattleArena
         /// Gets an input from the player based on some given decision
         /// </summary>
         /// <param name="description">The context for the input</param>
-        /// <param name="option1">The first option the player can choose</param>
-        /// <param name="option2">The second option the player can choose</param>
+        /// <param name="options">The players choices</param>       
         /// <returns></returns>
         int GetInput(string description, params string[] options)
         {
@@ -117,7 +124,19 @@ namespace BattleArena
                         Console.ReadKey(true);
                     }
                 }
+                //If the player didn't type an int
+                else
+                {
+                    //Set input recieved to default value
+                    inputRecieved = -1;
+                    Console.WriteLine("Invalid Input");
+                    Console.ReadKey(true);
+                }
+
+                Console.Clear();
             }
+
+            return inputRecieved;
         }
 
         /// <summary>
@@ -158,12 +177,12 @@ namespace BattleArena
         {
             int input = GetInput("Play Again?", "1. Yes", "2. No");
 
-            if (input == 1)
+            if (input == 0)
             {
                 InitalizeEnemies();
                 _currentScene = 0;
             }
-            else if (input == 2)
+            else if (input == 1)
             {
                 _gameOver = true;
             }
@@ -184,11 +203,11 @@ namespace BattleArena
            int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
                     "1. Yes", "2. No");
                 
-            if (input == 1)
+            if (input == 0)
             {
              _currentScene = 1;
             }
-            else if (input == 2)
+            else if (input == 1)
             {
              _currentScene = 0;
             }              
@@ -204,11 +223,11 @@ namespace BattleArena
             int input = GetInput("Nice to meet you " + _playerName + ". Please select a character.",
                 "1. Wizard", "2. Knight");
 
-            if (input == 1)
+            if (input == 0)
             {
                 _player = new Player(_playerName, 50, 25, 5, _wizardItems);              
             }
-            else if (input == 2)
+            else if (input == 1)
             {
                 _player = new Player(_playerName, 75, 15, 10, _knightItems);             
             }
@@ -228,6 +247,19 @@ namespace BattleArena
             Console.WriteLine("Defense Power: " + character.DefensePower + "\n");
         }     
 
+        public void DisplayEquipItemMenu()
+        {
+            //Get item index
+            int input = GetInput("Select an item to equip.", _player.GetItemNames());
+
+            //Equip item at given index
+            if (!_player.TryEquipItem(input))
+                Console.WriteLine("You couldn't find that item in your bag.");
+
+            //Print feedack
+            Console.WriteLine("You equipped " + _player.CurrentItem.Name + "!");
+        }
+
         /// <summary>
         /// Simulates one turn in the current monster fight
         /// </summary>
@@ -237,9 +269,9 @@ namespace BattleArena
             DisplayStats(_currentEnemy);
 
             int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?",
-                "1. Attack", "2. Equip Item");
+                "1. Attack", "2. Equip Item", "3. Remove current item");
 
-            if (input == 1)
+            if (input == 0)
             {
                 //The player attacks the enemy
                 float damageDealt = _player.Attack(_currentEnemy);
@@ -249,9 +281,9 @@ namespace BattleArena
                 damageDealt = _currentEnemy.Attack(_player);
                 Console.WriteLine("The " + _currentEnemy.Name + " dealt " + damageDealt);
             }
-            else if (input == 2)
+            else if (input == 1)
             {
-                Console.WriteLine("You dodged the enemy's attack!");
+                DisplayEquipItemMenu();              
             }
         }
 
@@ -289,12 +321,12 @@ namespace BattleArena
         public void InitalizeItems()
         {
             //Wizard Items
-            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5 };
-            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15 };
+            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, ItemType = 1 };
+            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, ItemType = 0 };
 
             //Knight Items
-            Item wand = new Item { Name = "Wand", StatBoost = 1025 };
-            Item shoes = new Item { Name = "Shoes", StatBoost = 9000.05f };
+            Item wand = new Item { Name = "Wand", StatBoost = 10, ItemType = 1 };
+            Item shoes = new Item { Name = "Shoes", StatBoost = 90, ItemType = 0 };
 
             //Initialize Arrays
             _wizardItems = new Item[] { bigWand, bigShield };
